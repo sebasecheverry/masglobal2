@@ -15,5 +15,12 @@ namespace Client
                 "Employees"));
             return await GetAsync<List<EmployeeEntity>>(requestUrl);
         }
+
+        public async Task<EmployeeEntity> GetEmployee(int id)
+        {
+            var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                "Employees/" + id));
+            return await GetAsync<EmployeeEntity>(requestUrl);
+        }
     }
 }

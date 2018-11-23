@@ -6,7 +6,8 @@ using Models;
 namespace Entities.DTOs
 {
     public abstract class IEmployeeDto : EmployeeEntity
-    {                   
+    {
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public abstract double AnnualSalary { get; }
     }
 }

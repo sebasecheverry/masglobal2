@@ -9,6 +9,7 @@ using BusinessLogic.Factories;
 using Models;
 using BusinessLogic;
 using Entities.DTOs;
+using DataAccess.DataAccess;
 
 namespace Employees.Controllers
 {
@@ -16,53 +17,27 @@ namespace Employees.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        // GET api/values
+        EmployeeDataAccess dataAccess = new EmployeeDataAccess();
+        JsonSerializerSettings settings = new JsonSerializerSettings();
+
+        // GET api/employees
         [HttpGet]
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {
-            EmployeeFactory factory = new EmployeeFactory();
-            var data = await ApiFactory.Instance.GetEmployees();
-            string result = JsonConvert.SerializeObject(data.ToList());
-            var employeeList = new List<IEmployeeDto>();
-            foreach (EmployeeEntity employee in data)
-            {
-                employeeList.Add(factory.getEmployee(employee as EmployeeEntity));
-            }
-
-            foreach (IEmployeeDto employee in employeeList)
-            {
-                double test = employee.AnnualSalary;
-            }
-
-            result = JsonConvert.SerializeObject(employeeList);
-
-            return new string[] { result };
-            //return new string[] { "value1", "value2" };
+            var data = await dataAccess.Get();            
+            settings.CheckAdditionalContent = true;
+            var hola = JsonConvert.SerializeObject(data.Value, Formatting.Indented);
+            
+            return new string[] { hola };
         }
 
-        // GET api/values/id
+        // GET api/employees/id
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<ActionResult<string>> Get(int id)
         {
+            var data = await dataAccess.Get(id);
+
             return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
