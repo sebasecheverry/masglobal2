@@ -15,10 +15,8 @@ export const actionCreators = {
 
       let url = `https://localhost:44307/api/employees`;
 
-        if (id != null) {
-          console.log(url);
-            url = url + "/" + id;
-          console.log(url);
+        if (id != null) {          
+            url = url + "/" + id;          
       }
 
 

@@ -9,7 +9,6 @@ class EmployeeComponent extends Component {
     // This method runs when the component is first added to the page
       const startDateIndex = 0;
       this.props.requestWeatherForecasts(startDateIndex);
-      console.log(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -22,8 +21,7 @@ class EmployeeComponent extends Component {
         this.props.changeEmployeeId(index);
     }
 
-    onClick(event) {
-        console.log("click");        
+    onClick(event) {        
         this.props.requestWeatherForecasts();        
     }
 
