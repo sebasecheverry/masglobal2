@@ -1,11 +1,11 @@
 ﻿import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
-import * as WeatherForecasts from './WeatherForecasts';
+import * as EmployeeReducer from './EmployeeReducer';
 
 export default function configureStore(history, initialState) {
   const reducers = {    
-    weatherForecasts: WeatherForecasts.reducer
+      employees: EmployeeReducer.reducer
   };
 
   const middleware = [

@@ -34,7 +34,7 @@ namespace Employees.Controllers
         // GET api/employees/id
         [HttpGet("{id}")]
         [DisableCors]
-        public async Task<ActionResult<IEmployeeDto>> Get(int id)
+        public async Task<ActionResult<IEnumerable<IEmployeeDto>>> Get(int id)
         {
             var data = await dataAccess.Get(id);
             return data;

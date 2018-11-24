@@ -28,13 +28,15 @@ namespace DataAccess.DataAccess
                         
         }
 
-        public async Task<ActionResult<IEmployeeDto>> Get(int id)
+        public async Task<ActionResult<IEnumerable<IEmployeeDto>>> Get(int id)
         {
             var employees = await ApiFactory.Instance.GetEmployees();
             var item = employees.FirstOrDefault(employee => employee.Id == id);
+            var employeeList = new List<IEmployeeDto>();
             if (item != null)
             {
-                return factory.getEmployee(item);
+                employeeList.Add(factory.getEmployee(item as EmployeeEntity));
+                return employeeList;
             } else
             {
                 return null;
