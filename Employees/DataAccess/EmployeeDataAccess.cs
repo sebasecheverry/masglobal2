@@ -17,9 +17,9 @@ namespace DataAccess.DataAccess
 
         public async Task<ActionResult<IEnumerable<IEmployeeDto>>> Get()
         {
-            var data = await ApiFactory.Instance.GetEmployees();            
+            var employees = await ApiFactory.Instance.GetEmployees();            
             var employeeList = new List<IEmployeeDto>();
-            foreach (EmployeeEntity employee in data)
+            foreach (EmployeeEntity employee in employees)
             {
                 employeeList.Add(factory.getEmployee(employee as EmployeeEntity));
             }
@@ -30,11 +30,11 @@ namespace DataAccess.DataAccess
 
         public async Task<ActionResult<IEmployeeDto>> Get(int id)
         {
-            EmployeeEntity data = await ApiFactory.Instance.GetEmployee(id);
-
-            if(data != null)
+            var employees = await ApiFactory.Instance.GetEmployees();
+            var item = employees.FirstOrDefault(employee => employee.Id == id);
+            if (item != null)
             {
-                return factory.getEmployee(data);
+                return factory.getEmployee(item);
             } else
             {
                 return null;

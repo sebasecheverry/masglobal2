@@ -10,11 +10,13 @@ using Models;
 using BusinessLogic;
 using Entities.DTOs;
 using DataAccess.DataAccess;
+using Microsoft.AspNetCore.Cors;
 
 namespace Employees.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [DisableCors]
     public class EmployeesController : ControllerBase
     {
         EmployeeDataAccess dataAccess = new EmployeeDataAccess();
@@ -22,22 +24,20 @@ namespace Employees.Controllers
 
         // GET api/employees
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<string>>> Get()
+        [DisableCors]
+        public async Task<ActionResult<IEnumerable<IEmployeeDto>>> Get()
         {
-            var data = await dataAccess.Get();            
-            settings.CheckAdditionalContent = true;
-            var hola = JsonConvert.SerializeObject(data.Value, Formatting.Indented);
-            
-            return new string[] { hola };
+            var data = await dataAccess.Get();                                    
+            return data;
         }
 
         // GET api/employees/id
         [HttpGet("{id}")]
-        public async Task<ActionResult<string>> Get(int id)
+        [DisableCors]
+        public async Task<ActionResult<IEmployeeDto>> Get(int id)
         {
             var data = await dataAccess.Get(id);
-
-            return "value";
+            return data;
         }
     }
 }

@@ -19,7 +19,8 @@ namespace Employees
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = configuration;            
+
             ApplicationSettings.ApiEndPointUrl = configuration.GetSection("CustomProjectSettings").GetSection("WebApiBaseUrl").Value;
         }
 
@@ -28,7 +29,29 @@ namespace Employees
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsAllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                    });
+
+                options.AddPolicy("CorsAllowSpecific",
+                    p => p.WithHeaders("Content-Type", "Accept", "Auth-Token")
+                        .WithMethods("POST", "PUT", "DELETE")
+                        .SetPreflightMaxAge(new TimeSpan(1728000))
+                        .AllowAnyOrigin()
+                        .AllowCredentials()
+                    );
+            });
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);           
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,10 +64,11 @@ namespace Employees
             else
             {
                 app.UseHsts();
-            }
-
+            }            
             app.UseHttpsRedirection();
-            app.UseMvc();
+            var corsAllowAll = Configuration["CustomProjectSettings:CorsAllowAll"] ?? "false";
+            app.UseCors(corsAllowAll == "true" ? "CorsAllowAll" : "CorsAllowSpecific");
+            app.UseMvc();            
         }
     }
 }
